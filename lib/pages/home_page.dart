@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:weather_app/pages/about_page.dart';
 import 'package:weather_app/pages/forecast_page.dart';
+import 'package:weather_app/pages/current_weather_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -14,7 +15,7 @@ class _HomePageState extends State<HomePage> {
   int selectedPage = 0;
 
   final List<Widget> _pageOptions = [
-    const HomePage(),
+    const CurrentWeatherPage(),
     const ForecastPage(),
     const AboutPage(),
   ];

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:weather_app/pages/home_page.dart';
+import './providers/weather_provider.dart';
 
 void main() {
   runApp(const WeatherApp());
@@ -11,14 +13,17 @@ class WeatherApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Weather App',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
-        textTheme: GoogleFonts.robotoTextTheme(),
+    return ChangeNotifierProvider(
+      create: (context) => WeatherProvider(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Weather App',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
+          textTheme: GoogleFonts.robotoTextTheme(),
+        ),
+        home: HomePage(),
       ),
-      home: const HomePage(),
     );
   }
 }
