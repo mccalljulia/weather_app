@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class AboutPage extends StatefulWidget {
   const AboutPage({super.key});
@@ -38,6 +37,12 @@ class _AboutPageState extends State<AboutPage> {
                 style: TextStyle(fontSize: 16),
                 textAlign: TextAlign.center,
               ),
+              SizedBox(height: 15),
+              Text(
+                'Version 1.0.0',
+                style: TextStyle(fontSize: 16, color: Colors.blueGrey),
+                textAlign: TextAlign.center,
+              )
             ],
           ),
         ),
