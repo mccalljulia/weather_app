@@ -28,7 +28,6 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage> {
                 suffixIcon: IconButton(
                   icon: Icon(Icons.search),
                   onPressed: () {
-                    print("Fetching weather for: ${_cityController.text}");
                     weatherProvider.fetchWeather(_cityController.text);
                   },
                 ),
