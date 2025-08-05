@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:weather_app/pages/about_page.dart';
+import 'package:weather_app/pages/forecast_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -9,31 +11,31 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
-  int _selectedIndex = 0;
-  static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static const List<Widget> _widgetOptions = <Widget>[
-    Text('Current Weather', style: optionStyle),
-    Text('Forecast', style: optionStyle),
-    Text('About', style: optionStyle),
+  int selectedPage = 0;
+
+  final List<Widget> _pageOptions = [
+    const HomePage(),
+    const ForecastPage(),
+    const AboutPage(),
   ];
 
   void _onItemTapped(int index) {
     setState(() {
-      _selectedIndex = index;
+      selectedPage = index;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(child: _widgetOptions.elementAt(_selectedIndex)),
-      bottomNavigationBar: BottomNavigationBar(
+      body: _pageOptions[selectedPage],
+      bottomNavigationBar: BottomNavigationBar(        
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Current'),
           BottomNavigationBarItem(icon: Icon(Icons.sunny), label: 'Forecast'),
           BottomNavigationBarItem(icon: Icon(Icons.info), label: 'About'),
         ],
-        currentIndex: _selectedIndex,
+        currentIndex: selectedPage,
         selectedItemColor: Colors.teal,
         onTap: _onItemTapped,
       ),
