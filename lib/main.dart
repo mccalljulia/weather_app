@@ -6,7 +6,19 @@ import './providers/weather_provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 Future<void> main() async {
-  await dotenv.load();
+  WidgetsFlutterBinding.ensureInitialized();
+  try {
+    await dotenv.load();
+  } catch (e) {
+    debugPrint("Could not load .env file: $e");
+  }
+
+  ErrorWidget.builder = (FlutterErrorDetails details) {
+    return Material(
+      child: Center(child: Text('Error: ${details.exception}')),
+    );
+  };
+
   runApp(const WeatherApp());
 }
 
@@ -21,6 +33,11 @@ class WeatherApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Weather App',
         theme: ThemeData(
+          bottomNavigationBarTheme: BottomNavigationBarThemeData(
+            selectedItemColor: Colors.teal,
+            unselectedItemColor: Colors.blueGrey,
+            type: BottomNavigationBarType.fixed,
+          ),
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
           textTheme: GoogleFonts.robotoTextTheme(),
         ),

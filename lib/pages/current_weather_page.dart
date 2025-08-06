@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import '../providers/weather_provider.dart';
+import '../components/weather_display.dart';
 
 class CurrentWeatherPage extends StatefulWidget {
   const CurrentWeatherPage({super.key});
@@ -10,7 +12,37 @@ class CurrentWeatherPage extends StatefulWidget {
 }
 
 class _CurrentWeatherPageState extends State<CurrentWeatherPage> {
-  final _cityController = TextEditingController();
+
+  Future<void> _fetchDefaultWeather() async {
+    final weatherProvider = Provider.of<WeatherProvider>(context, listen: false);
+    await weatherProvider.fetchWeather("Stockholm");
+  }
+
+  Future<void> _loadCurrentLocationWeather() async {
+    try {
+      Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+      double lat = position.latitude;
+      double lon = position.longitude;
+      final weatherProvider = Provider.of<WeatherProvider>(context, listen: false);
+      await weatherProvider.fetchWeatherByLatLong(lat, lon);
+    } catch (e) {
+      debugPrint('Could not get current location: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Location error: $e')),
+        );
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _fetchDefaultWeather();
+    });
+    _loadCurrentLocationWeather();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,53 +51,13 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage> {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            TextField(
-              controller: _cityController,
-              decoration: InputDecoration(
-                labelText: 'Enter City',
-                suffixIcon: IconButton(
-                  icon: Icon(Icons.search),
-                  onPressed: () {
-                    weatherProvider.fetchWeather(_cityController.text);
-                  },
-                ),
-              ),
-            ),
-            SizedBox(height: 20),
-            weatherProvider.isLoading
-                ? CircularProgressIndicator()
-                : weatherProvider.weather == null
-                ? Text("No Data")
-                : Column(
-                    children: [
-                      Text(
-                        weatherProvider.weather!.city,
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        weatherProvider.weather!.description,
-                        style: TextStyle(fontSize: 18),
-                      ),
-                      Text(
-                        '${weatherProvider.weather!.temperature} Celsius',
-                        style: TextStyle(fontSize: 24),
-                      ),
-                    ],
-                  ),
-          ],
-        ),
+        child: weatherProvider.isLoading
+        ? const Center(child: CircularProgressIndicator())
+        : weatherProvider.weather == null
+            ? const Center(child: Text('No weather data for current location'))
+            : WeatherDisplay(weather: weatherProvider.weather!)             
       ),
     );
   }
 
-  @override
-  void dispose() {
-    _cityController.dispose();
-    super.dispose();
-  }
 }
