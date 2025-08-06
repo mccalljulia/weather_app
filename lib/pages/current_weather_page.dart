@@ -90,11 +90,13 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage> {
                         height: MediaQuery.of(context).size.height * 0.85,
                         // Weather data
                         child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: weatherProvider.isLoading
-                            ? const Center(child: CircularProgressIndicator())
-                            : WeatherDisplay(weather: weatherProvider.weather!),
-                      ),
+                          padding: const EdgeInsets.all(16),
+                          child: weatherProvider.isLoading
+                              ? const Center(child: CircularProgressIndicator())
+                              : WeatherDisplay(
+                                  weather: weatherProvider.weather!,
+                                ),
+                        ),
                       ),
                     ],
                   ),
