@@ -3,6 +3,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import '../providers/weather_provider.dart';
 import '../components/weather_display.dart';
+import '../utils/background.dart';
 
 class CurrentWeatherPage extends StatefulWidget {
   const CurrentWeatherPage({super.key});
@@ -49,6 +50,9 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage> {
     final weatherProvider = Provider.of<WeatherProvider>(context);
 
     return Scaffold(
+      backgroundColor: weatherProvider.weather != null
+        ? getBackgroundColor(weatherProvider.weather!.id)
+        : Colors.white,
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: weatherProvider.isLoading
