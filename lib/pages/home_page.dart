@@ -37,8 +37,8 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.teal.shade50,    
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Current'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Forecast'),
-          BottomNavigationBarItem(icon: Icon(Icons.sunny), label: 'Search'),
+          BottomNavigationBarItem(icon: Icon(Icons.sunny), label: 'Forecast'),
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
           BottomNavigationBarItem(icon: Icon(Icons.info), label: 'About'),
         ],
         currentIndex: selectedPage,
