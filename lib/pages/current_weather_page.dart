@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import '../providers/weather_provider.dart';
+import '../components/weather_display.dart';
 
 class CurrentWeatherPage extends StatefulWidget {
   const CurrentWeatherPage({super.key});
@@ -54,25 +55,7 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage> {
         ? const Center(child: CircularProgressIndicator())
         : weatherProvider.weather == null
             ? const Center(child: Text('No weather data for current location'))
-            : Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    weatherProvider.weather!.city,
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    weatherProvider.weather!.description,
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  const SizedBox(height: 20),
-                  Text(
-                    '${weatherProvider.weather!.temperature} Celsius',
-                    style: TextStyle(fontSize: 24),
-                  ),
-                ]
-            )
+            : WeatherDisplay(weather: weatherProvider.weather!)             
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/weather_provider.dart';
+import '../components/weather_display.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -38,25 +39,7 @@ class _SearchPageState extends State<SearchPage> {
                 ? CircularProgressIndicator()
                 : weatherProvider.weather == null
                 ? Text("No Data")
-                : Column(
-                    children: [
-                      Text(
-                        weatherProvider.weather!.city,
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        weatherProvider.weather!.description,
-                        style: TextStyle(fontSize: 18),
-                      ),
-                      Text(
-                        '${weatherProvider.weather!.temperature} Celsius',
-                        style: TextStyle(fontSize: 24),
-                      ),
-                    ],
-                  ),
+                : WeatherDisplay(weather: weatherProvider.weather!)
           ],
         ),
       ),
