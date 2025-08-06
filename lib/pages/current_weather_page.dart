@@ -13,25 +13,32 @@ class CurrentWeatherPage extends StatefulWidget {
 }
 
 class _CurrentWeatherPageState extends State<CurrentWeatherPage> {
-
   Future<void> _fetchDefaultWeather() async {
-    final weatherProvider = Provider.of<WeatherProvider>(context, listen: false);
+    final weatherProvider = Provider.of<WeatherProvider>(
+      context,
+      listen: false,
+    );
     await weatherProvider.fetchWeather("Stockholm");
   }
 
   Future<void> _loadCurrentLocationWeather() async {
     try {
-      Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
       double lat = position.latitude;
       double lon = position.longitude;
-      final weatherProvider = Provider.of<WeatherProvider>(context, listen: false);
+      final weatherProvider = Provider.of<WeatherProvider>(
+        context,
+        listen: false,
+      );
       await weatherProvider.fetchWeatherByLatLong(lat, lon);
     } catch (e) {
       debugPrint('Could not get current location: $e');
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Location error: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Location error: $e')));
       }
     }
   }
@@ -50,18 +57,29 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage> {
     final weatherProvider = Provider.of<WeatherProvider>(context);
 
     return Scaffold(
-      backgroundColor: weatherProvider.weather != null
-        ? getBackgroundColor(weatherProvider.weather!.id)
-        : Colors.white,
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: weatherProvider.isLoading
-        ? const Center(child: CircularProgressIndicator())
-        : weatherProvider.weather == null
-            ? const Center(child: Text('No weather data for current location'))
-            : WeatherDisplay(weather: weatherProvider.weather!)             
-      ),
+      body: weatherProvider.weather == null
+          ? const Center(
+              child: Text('No weather data available for current location'),
+            )
+          : Stack(
+              fit: StackFit.expand,
+              children: [
+                // Background
+                Image.asset(
+                  getBackgroundImage(weatherProvider.weather!.id),
+                  fit: BoxFit.cover,
+                ),
+                // Overlay
+                Container(color: Colors.black.withOpacity(0.3)),
+                // Weather data
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: weatherProvider.isLoading
+                      ? const Center(child: CircularProgressIndicator())
+                      : WeatherDisplay(weather: weatherProvider.weather!),
+                ),
+              ],
+            ),
     );
   }
-
 }

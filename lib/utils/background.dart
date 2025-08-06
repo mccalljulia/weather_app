@@ -1,21 +1,19 @@
-import 'package:flutter/material.dart';
-
-Color getBackgroundColor(int weatherId) {
+String getBackgroundImage(int weatherId) {
   if (weatherId >= 200 && weatherId < 300) {
-    return Colors.deepPurple; // Thunderstorm
+    return 'assets/images/thunderstorm.jpg';
   } else if (weatherId >= 300 && weatherId < 400) {
-    return Colors.blueGrey; // Drizzle
+    return 'assets/images/drizzle.jpg';
   } else if (weatherId >= 500 && weatherId < 600) {
-    return Colors.blue; // Rain
+    return 'assets/images/rain.jpg';
   } else if (weatherId >= 600 && weatherId < 700) {
-    return Colors.white70; // Snow
+    return 'assets/images/snow.jpg';
   } else if (weatherId >= 700 && weatherId < 800) {
-    return Colors.grey; // Atmosphere (mist, fog, etc.)
+    return 'assets/images/fog.jpg'; // mist, smoke, etc.
   } else if (weatherId == 800) {
-    return Colors.orangeAccent; // Clear
+    return 'assets/images/clear.jpg';
   } else if (weatherId > 800 && weatherId < 900) {
-    return Colors.grey.shade600; // Clouds
+    return 'assets/images/clouds.jpg';
   } else {
-    return Colors.teal; // Fallback
+    return 'assets/images/default.jpg'; // fallback
   }
 }
