@@ -70,13 +70,34 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage> {
                   fit: BoxFit.cover,
                 ),
                 // Overlay
-                Container(color: Colors.black.withOpacity(0.3)),
-                // Weather data
                 Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: weatherProvider.isLoading
-                      ? const Center(child: CircularProgressIndicator())
-                      : WeatherDisplay(weather: weatherProvider.weather!),
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Colors.teal.withValues(alpha: 0.2),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.white54.withValues(alpha: 0.3),
+                              blurRadius: 10,
+                              offset: Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        width: MediaQuery.of(context).size.width * 0.85,
+                        height: MediaQuery.of(context).size.height * 0.85,
+                        // Weather data
+                        child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: weatherProvider.isLoading
+                            ? const Center(child: CircularProgressIndicator())
+                            : WeatherDisplay(weather: weatherProvider.weather!),
+                      ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
