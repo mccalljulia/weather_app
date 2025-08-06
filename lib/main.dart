@@ -6,7 +6,19 @@ import './providers/weather_provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 Future<void> main() async {
-  await dotenv.load();
+  WidgetsFlutterBinding.ensureInitialized();
+  try {
+    await dotenv.load();
+  } catch (e) {
+    debugPrint("Could not load .env file: $e");
+  }
+
+  ErrorWidget.builder = (FlutterErrorDetails details) {
+    return Material(
+      child: Center(child: Text('Error: ${details.exception}')),
+    );
+  };
+
   runApp(const WeatherApp());
 }
 
