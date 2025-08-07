@@ -1,19 +1,21 @@
 String getBackgroundImage(int weatherId) {
-  if (weatherId >= 200 && weatherId < 300) {
-    return 'assets/images/thunderstorm.jpg';
-  } else if (weatherId >= 300 && weatherId < 400) {
-    return 'assets/images/drizzle.jpg';
-  } else if (weatherId >= 500 && weatherId < 600) {
-    return 'assets/images/rain.jpg';
-  } else if (weatherId >= 600 && weatherId < 700) {
-    return 'assets/images/snow.jpg';
-  } else if (weatherId >= 700 && weatherId < 800) {
-    return 'assets/images/fog.jpg'; // mist, smoke, etc.
+  if (weatherId < 300) {
+    return 'assets/images/backgrounds/thunderstorm.jpg';  // 2xx thunderstorm 
+  } else if (weatherId < 400) {
+    return 'assets/images/backgrounds/drizzle.jpg';       // 3xx drizzle
+  } else if (weatherId < 500) {
+    return 'assets/images/backgrounds/default.jpg';       // fallback, no id in 400s
+  } else if (weatherId < 600) {
+    return 'assets/images/backgrounds/rain.jpg';          // 5xx rain
+  } else if (weatherId < 700) {
+    return 'assets/images/backgrounds/snow.jpg';          // 6xx snow
+  } else if (weatherId < 800) {
+    return 'assets/images/backgrounds/atmosphere.jpg';    // 7xx atmosphere
   } else if (weatherId == 800) {
-    return 'assets/images/clear.jpg';
-  } else if (weatherId > 800 && weatherId < 900) {
-    return 'assets/images/clouds.jpg';
+    return 'assets/images/backgrounds/clear.jpg';         // 800 clear
+  } else if (weatherId < 900) {
+    return 'assets/images/backgrounds/clouds.jpg';        // 80x clouds
   } else {
-    return 'assets/images/default.jpg'; // fallback
+    return 'assets/images/backgrounds/default.jpg';       // fallback
   }
 }
