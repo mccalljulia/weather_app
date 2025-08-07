@@ -13,13 +13,8 @@ class CurrentWeatherPage extends StatefulWidget {
 }
 
 class _CurrentWeatherPageState extends State<CurrentWeatherPage> {
-  Future<void> _fetchDefaultWeather() async {
-    final weatherProvider = Provider.of<WeatherProvider>(
-      context,
-      listen: false,
-    );
-    await weatherProvider.fetchWeather("Stockholm");
-  }
+  final _cityController = TextEditingController();
+  String? locationError;
 
   Future<void> _loadCurrentLocationWeather() async {
     try {
@@ -33,8 +28,11 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage> {
         listen: false,
       );
       await weatherProvider.fetchWeatherByLatLong(lat, lon);
+      setState(() {
+        locationError = null;
+      });
     } catch (e) {
-      debugPrint('Could not get current location: $e');
+      debugPrint('Could not get current location: $e. Please search a city.');
       if (mounted) {
         ScaffoldMessenger.of(
           context,
@@ -46,63 +44,117 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _fetchDefaultWeather();
-    });
     _loadCurrentLocationWeather();
+  }
+
+  @override
+  void dispose() {
+    _cityController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final weatherProvider = Provider.of<WeatherProvider>(context);
+    final weather = weatherProvider.weather;
 
     return Scaffold(
-      body: weatherProvider.weather == null
-          ? const Center(
-              child: Text('No weather data available for current location'),
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          SizedBox(height: 20),
+          // Background
+          if (weather != null)
+            Image.asset(
+              getBackgroundImage(weatherProvider.weather!.id),
+              fit: BoxFit.cover,
             )
-          : Stack(
-              fit: StackFit.expand,
-              children: [
-                // Background
-                Image.asset(
-                  getBackgroundImage(weatherProvider.weather!.id),
-                  fit: BoxFit.cover,
-                ),
-                // Overlay
-                Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: Colors.teal.withValues(alpha: 0.2),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.white54.withValues(alpha: 0.3),
-                              blurRadius: 10,
-                              offset: Offset(0, 2),
-                            ),
-                          ],
-                        ),
-                        width: MediaQuery.of(context).size.width * 0.85,
-                        height: MediaQuery.of(context).size.height * 0.85,
-                        // Weather data
-                        child: Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: weatherProvider.isLoading
-                              ? const Center(child: CircularProgressIndicator())
-                              : WeatherDisplay(
-                                  weather: weatherProvider.weather!,
-                                ),
-                        ),
+          else
+            Container(color: Colors.grey.shade200),
+          // Overlay
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                children: [
+                  // Search box
+                  TextField(
+                    controller: _cityController,
+                    decoration: InputDecoration(
+                      labelText: 'Enter City',
+                      suffixIcon: IconButton(
+                        icon: Icon(Icons.search),
+                        onPressed: () {
+                          final city = _cityController.text.trim();
+                          if (city.isNotEmpty) {
+                            weatherProvider.fetchWeather(_cityController.text);
+                            _cityController.clear();
+                          }
+                        },
                       ),
-                    ],
+                    ),
                   ),
-                ),
-              ],
+                  SizedBox(height: 20),
+                  // Current location button
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue.shade50,
+                      ),
+                    onPressed: () {
+                      _loadCurrentLocationWeather();
+                      _cityController.clear();
+                    },
+                    child: Text(
+                      'Current location',
+                      style: TextStyle(
+                        color: Colors.blue.shade900,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  // Weather info container
+                  Expanded(
+                    child: Center(
+                      child: weatherProvider.isLoading
+                          ? const CircularProgressIndicator()
+                          : weather != null
+                          ? Container(
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: Colors.blue.shade100.withValues(
+                                  alpha: 0.2,
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.white54.withValues(
+                                      alpha: 0.4,
+                                    ),
+                                    blurRadius: 10,
+                                    offset: Offset(0, 0),
+                                  ),
+                                ],
+                              ),
+                              width: MediaQuery.of(context).size.width * 0.85,
+                              height: MediaQuery.of(context).size.height * 0.85,
+                              child: WeatherDisplay(weather: weather),
+                            )
+                          : Text(
+                              locationError ??
+                                  'Invalid location. Please try again',
+                              style: TextStyle(fontSize: 18),
+                              textAlign: TextAlign.center,
+                            ),
+                    ),
+                  ),
+                ],
+              ),
             ),
+          ),
+        ],
+      ),
     );
   }
 }

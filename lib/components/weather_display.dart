@@ -19,7 +19,7 @@ class WeatherDisplay extends StatelessWidget {
         ),
         Text(dateFormat.format(weather.today)),
         Text(weather.description, style: TextStyle(fontSize: 18)),
-        Text('${weather.temperature} Celsius', style: TextStyle(fontSize: 24)),
+        Text('${weather.temperature} Celsius', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
         SizedBox(height: 20),
         Text('Sunrise: ${timeFormat.format(weather.sunrise)}'),
         Text('Sunset: ${timeFormat.format(weather.sunset)}'),

@@ -34,11 +34,11 @@ class WeatherApp extends StatelessWidget {
         title: 'Weather App',
         theme: ThemeData(
           bottomNavigationBarTheme: BottomNavigationBarThemeData(
-            selectedItemColor: Colors.teal,
+            selectedItemColor: Colors.blue.shade900,
             unselectedItemColor: Colors.blueGrey,
             type: BottomNavigationBarType.fixed,
           ),
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
           textTheme: GoogleFonts.robotoTextTheme(),
         ),
         home: HomePage(),
