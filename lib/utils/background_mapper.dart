@@ -6,7 +6,7 @@ String getBackgroundImage(int weatherId) {
   } else if (weatherId < 500) {
     return 'assets/images/backgrounds/default.jpg';       // fallback, no id in 400s
   } else if (weatherId < 600) {
-    return 'assets/images/backgrounds/rain.jpg';          // 5xx rain
+    return 'assets/images/backgrounds/rainy.jpg';          // 5xx rain
   } else if (weatherId < 700) {
     return 'assets/images/backgrounds/snow.jpg';          // 6xx snow
   } else if (weatherId < 800) {

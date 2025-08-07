@@ -6,7 +6,7 @@ String getWeatherIcon(int weatherId) {
   } else if (weatherId < 500) {
     return 'assets/images/icons/error.png';         // fallback, no id in 400s
   } else if (weatherId < 600) {
-    return 'assets/images/icons/rain.png';          // 5xx rain
+    return 'assets/images/icons/rainy.png';          // 5xx rain
   } else if (weatherId < 700) {
     return 'assets/images/icons/snow.png';          // 6xx snow
   } else if (weatherId < 800) {
