@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/weather.dart';
+import '../models/forecast_item.dart';
 import '../services/weather_service.dart';
 import '../services/location_service.dart';
 
@@ -8,9 +9,16 @@ class WeatherProvider with ChangeNotifier {
   bool _isLoading = false;
   final WeatherService _weatherService = WeatherService();
   final LocationService _locationService = LocationService();
+  List<ForecastItem> _forecast = [];
 
   Weather? get weather => _weather;
   bool get isLoading => _isLoading;
+  List<ForecastItem> get forecast => _forecast;
+
+  Future<void> fetchForecast(String city) async {
+    _forecast = ForecastItem.fromJsonList(data['list']);
+    notifyListeners();
+  }
 
   Future<void> fetchWeather(String city) async {
     _isLoading = true;
