@@ -35,7 +35,7 @@ class WeatherApp extends StatelessWidget {
         theme: ThemeData(
           bottomNavigationBarTheme: BottomNavigationBarThemeData(
             selectedItemColor: Colors.blue.shade900,
-            unselectedItemColor: Colors.blueGrey,
+            unselectedItemColor: Colors.grey.shade600,
             type: BottomNavigationBarType.fixed,
           ),
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
