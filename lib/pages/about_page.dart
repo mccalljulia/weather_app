@@ -11,14 +11,14 @@ class _AboutPageState extends State<AboutPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.blue.shade50,
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(24),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: const [
-              Icon(Icons.info_outline, size: 80, color: Colors.teal),
+              Icon(Icons.info_outline, size: 50, color: Colors.blue),
               SizedBox(height: 20),
               Text(
                 'About',
