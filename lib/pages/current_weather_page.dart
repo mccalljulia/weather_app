@@ -3,7 +3,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import '../providers/weather_provider.dart';
 import '../components/weather_display.dart';
-import '../utils/background.dart';
+import '../utils/background_mapper.dart';
 
 class CurrentWeatherPage extends StatefulWidget {
   const CurrentWeatherPage({super.key});
@@ -73,7 +73,7 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage> {
             Container(color: Colors.grey.shade200),
           // Overlay
           SafeArea(
-            child: Padding(
+            child: SingleChildScrollView(
               padding: const EdgeInsets.all(20),
               child: Column(
                 children: [
@@ -94,12 +94,12 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   // Current location button
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blue.shade50,
-                      ),
+                    ),
                     onPressed: () {
                       _loadCurrentLocationWeather();
                       _cityController.clear();
@@ -113,41 +113,37 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   // Weather info container
-                  Expanded(
-                    child: Center(
-                      child: weatherProvider.isLoading
-                          ? const CircularProgressIndicator()
-                          : weather != null
-                          ? Container(
-                              padding: const EdgeInsets.all(16),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                color: Colors.blue.shade100.withValues(
-                                  alpha: 0.2,
-                                ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.white54.withValues(
-                                      alpha: 0.4,
-                                    ),
-                                    blurRadius: 10,
-                                    offset: Offset(0, 0),
-                                  ),
-                                ],
+                  Center(
+                    child: weatherProvider.isLoading
+                        ? const CircularProgressIndicator()
+                        : weather != null
+                        ? Container(
+                            padding: const EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: Colors.blue.shade100.withValues(
+                                alpha: 0.2,
                               ),
-                              width: MediaQuery.of(context).size.width * 0.85,
-                              height: MediaQuery.of(context).size.height * 0.85,
-                              child: WeatherDisplay(weather: weather),
-                            )
-                          : Text(
-                              locationError ??
-                                  'Invalid location. Please try again',
-                              style: TextStyle(fontSize: 18),
-                              textAlign: TextAlign.center,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.white54.withValues(alpha: 0.4),
+                                  blurRadius: 10,
+                                  offset: Offset(0, 0),
+                                ),
+                              ],
                             ),
-                    ),
+                            width: MediaQuery.of(context).size.width * 0.85,
+                            height: MediaQuery.of(context).size.height * 0.85,
+                            child: WeatherDisplay(weather: weather),
+                          )
+                        : Text(
+                            locationError ??
+                                'Invalid location. Please try again',
+                            style: TextStyle(fontSize: 18),
+                            textAlign: TextAlign.center,
+                          ),
                   ),
                 ],
               ),
