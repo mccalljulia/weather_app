@@ -15,6 +15,7 @@ class CurrentWeatherPage extends StatefulWidget {
 class _CurrentWeatherPageState extends State<CurrentWeatherPage> {
   final _cityController = TextEditingController();
   String? locationError;
+  bool _showSearchBar = false;
 
   Future<void> _loadCurrentLocationWeather() async {
     try {
@@ -32,7 +33,7 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage> {
         locationError = null;
       });
     } catch (e) {
-      debugPrint('Could not get current location: $e. Please search a city.');
+      debugPrint('Could not get current location: $e.');
       if (mounted) {
         ScaffoldMessenger.of(
           context,
@@ -62,7 +63,6 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage> {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          SizedBox(height: 20),
           // Background
           if (weather != null)
             Image.asset(
@@ -70,82 +70,120 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage> {
               fit: BoxFit.cover,
             )
           else
-            Container(color: Colors.grey.shade200),
-          // Overlay
-          SafeArea(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                children: [
-                  // Search box
-                  TextField(
-                    controller: _cityController,
-                    decoration: InputDecoration(
-                      labelText: 'Enter City',
-                      suffixIcon: IconButton(
-                        icon: Icon(Icons.search),
-                        onPressed: () {
-                          final city = _cityController.text.trim();
-                          if (city.isNotEmpty) {
-                            weatherProvider.fetchWeather(_cityController.text);
-                            _cityController.clear();
-                          }
-                        },
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  // Current location button
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue.shade50,
-                    ),
-                    onPressed: () {
-                      _loadCurrentLocationWeather();
-                      _cityController.clear();
-                    },
-                    child: Text(
-                      'Current location',
-                      style: TextStyle(
-                        color: Colors.blue.shade900,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  // Weather info container
-                  Center(
-                    child: weatherProvider.isLoading
-                        ? const CircularProgressIndicator()
-                        : weather != null
-                        ? Container(
-                            padding: const EdgeInsets.all(16),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              color: Colors.blue.shade100.withValues(
-                                alpha: 0.2,
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.white54.withValues(alpha: 0.4),
-                                  blurRadius: 10,
-                                  offset: Offset(0, 0),
-                                ),
-                              ],
-                            ),
-                            width: MediaQuery.of(context).size.width * 0.85,
-                            height: MediaQuery.of(context).size.height * 0.85,
-                            child: WeatherDisplay(weather: weather),
-                          )
-                        : Text(
-                            locationError ??
-                                'Invalid location. Please try again',
-                            style: TextStyle(fontSize: 18),
-                            textAlign: TextAlign.center,
+            Container(color: Colors.blue.shade100),
+
+          // Search bar / current location
+          if (_showSearchBar)
+            Positioned(
+              top: 20,
+              left: 60,
+              right: 60,
+              child: Material(
+                elevation: 6,
+                borderRadius: BorderRadius.circular(20),
+                color: Colors.blue.shade50,
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Column(
+                    children: [
+                      TextField(
+                        controller: _cityController,
+                        decoration: InputDecoration(
+                          hintText: 'Enter City',
+                          suffixIcon: IconButton(
+                            icon: Icon(Icons.search),
+                            onPressed: () {
+                              final city = _cityController.text.trim();
+                              if (city.isNotEmpty) {
+                                weatherProvider.fetchWeather(city);
+                                _cityController.clear();
+                                setState(() => _showSearchBar = false);
+                              }
+                            },
                           ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20),
+                            borderSide: BorderSide.none,
+                          ),
+                          filled: true,
+                          fillColor: Colors.blue.shade50.withValues(alpha: 0.8),
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      ElevatedButton(
+                        onPressed: () {
+                          _loadCurrentLocationWeather();
+                          _cityController.clear();
+                          setState(() => _showSearchBar = false);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue.shade100,
+                          foregroundColor: Colors.blue.shade900,
+                          shape: StadiumBorder(),
+                        ),
+                        child: Text('Current Location'),
+                      ),
+                    ],
                   ),
-                ],
+                ),
+              ),
+            ),
+
+          // Weather information
+          Positioned.fill(
+            top: _showSearchBar ? 140 : 60,
+            child: SafeArea(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 10,
+                ),
+                child: Column(
+                  children: [
+                    if (weatherProvider.isLoading)
+                      const CircularProgressIndicator()
+                    else if (weather != null)
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Colors.blue.shade100.withValues(alpha: 0.3),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.white54.withValues(alpha: 0.3),
+                              blurRadius: 10,
+                              offset: Offset(0, 0),
+                            ),
+                          ],
+                        ),
+                        child: WeatherDisplay(weather: weather),
+                      )
+                    else
+                      Text(
+                        locationError ??
+                            'Could not find your location.\nPlease search for an existing place.',
+                        style: TextStyle(fontSize: 18),
+                        textAlign: TextAlign.center,
+                      ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+
+          // Floating search icon
+          Positioned(
+            top: 20,
+            right: 20,
+            child: FloatingActionButton(
+              backgroundColor: Colors.blue.shade50,
+              mini: true,
+              onPressed: () {
+                setState(() => _showSearchBar = !_showSearchBar);
+              },
+              child: Icon(
+                _showSearchBar ? Icons.close : Icons.search,
+                color: Colors.black,
               ),
             ),
           ),

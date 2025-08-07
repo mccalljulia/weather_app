@@ -23,10 +23,12 @@ class WeatherDisplay extends StatelessWidget {
           ),
           // Time
           Text(dateFormat.format(weather.today)),
+          const SizedBox(height: 10),
           // Weather icon
           Image.asset(
             getWeatherIcon(weather.id),
-            width: MediaQuery.of(context).size.width * 0.3, // Responsive size
+            width: 150,
+            height: 150,
           ),
           SizedBox(height: 10),
           // Description
