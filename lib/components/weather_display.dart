@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/weather.dart';
 import 'package:intl/intl.dart';
-import '../utils/icon_mapper.dart';
 
 class WeatherDisplay extends StatelessWidget {
   final Weather weather;
@@ -26,31 +25,27 @@ class WeatherDisplay extends StatelessWidget {
             dateFormat.format(weather.today),
             style: TextStyle(fontSize: 20),
           ),
-          const SizedBox(height: 10),
-          // Weather icon
-          Image.asset(
-            getWeatherIconByCode(weather.iconCode),
+          Image.network(
+            'https://openweathermap.org/img/wn/${weather.iconCode}@2x.png',
             width: 150,
             height: 150,
+            fit: BoxFit.contain,
           ),
-          SizedBox(height: 10),
           // Description
-          Text(
-            weather.description,
-            style: TextStyle(fontSize: 20)
-          ),
+          Text(weather.description, style: TextStyle(fontSize: 20)),
           // Temperature
           Text(
             '${weather.temperature.toStringAsFixed(0)} °C',
-            style: TextStyle(
-              fontSize: 30,
-              fontWeight: FontWeight.bold,
-            ),
+            style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
           ),
           // Feels like temperature
           Text(
             'Feels ${weather.feelsLike.toStringAsFixed(0)} °C',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.grey.shade800),
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.grey.shade800,
+            ),
           ),
           SizedBox(height: 20),
           // Sunrise and sunset times
