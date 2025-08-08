@@ -56,11 +56,18 @@ class WeatherDisplay extends StatelessWidget {
                 children: [
                   Image.asset(
                     'assets/images/icons/sunrise_icon.png',
-                    width: 50,
-                    height: 50,
+                    width: 60,
+                    height: 60,
+                    fit: BoxFit.contain,
                   ),
-                  Text('Sunrise'),
-                  Text(timeFormat.format(weather.sunrise)),
+                  Text(
+                    'Sunrise',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  Text(
+                    timeFormat.format(weather.sunrise),
+                    style: TextStyle(fontSize: 16),
+                  ),
                 ],
               ),
               SizedBox(width: 50),
@@ -68,11 +75,18 @@ class WeatherDisplay extends StatelessWidget {
                 children: [
                   Image.asset(
                     'assets/images/icons/sunset_icon.png',
-                    width: 50,
-                    height: 50,
+                    width: 60,
+                    height: 60,
+                    fit: BoxFit.contain,
                   ),
-                  Text('Sunset'),
-                  Text(timeFormat.format(weather.sunset)),
+                  Text(
+                    'Sunset',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  Text(
+                    timeFormat.format(weather.sunset),
+                    style: TextStyle(fontSize: 16),
+                  ),
                 ],
               ),
             ],
