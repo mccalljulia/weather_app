@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:weather_app/pages/about_page.dart';
-import 'package:weather_app/pages/forecast_page.dart';
 import 'package:weather_app/pages/current_weather_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -16,7 +15,6 @@ class _HomePageState extends State<HomePage> {
 
   final List<Widget> _pageOptions = [
     const CurrentWeatherPage(),
-    const ForecastPage(),
     const AboutPage(),
   ];
 
@@ -34,8 +32,7 @@ class _HomePageState extends State<HomePage> {
       bottomNavigationBar: BottomNavigationBar(    
         backgroundColor: Colors.blueGrey.shade50,    
         items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Current'),
-          BottomNavigationBarItem(icon: Icon(Icons.sunny), label: 'Forecast'),
+          BottomNavigationBarItem(icon: Icon(Icons.sunny), label: 'Current'),
           BottomNavigationBarItem(icon: Icon(Icons.info), label: 'About'),
         ],
         currentIndex: selectedPage,
