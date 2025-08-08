@@ -67,7 +67,7 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage> {
           // Background
           if (weather != null)
             Image.asset(
-              getBackgroundImage(weatherProvider.weather!.id),
+              getBackgroundByCode(weatherProvider.weather!.iconCode),
               fit: BoxFit.cover,
             )
           else
