@@ -26,9 +26,11 @@ class ForecastDisplay extends StatelessWidget {
         const SizedBox(height: 10),
         SizedBox(
           height: 200,
-          child: ListView.builder(
+          child: ListView.separated(
             scrollDirection: Axis.horizontal,
+            physics: BouncingScrollPhysics(),
             itemCount: forecast.length,
+            separatorBuilder: (_, __) => SizedBox(width: 12),
             itemBuilder: (context, index) {
               final item = forecast[index];
               return AnimatedContainer(
