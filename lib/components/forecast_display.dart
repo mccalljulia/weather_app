@@ -19,13 +19,14 @@ class ForecastDisplay extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // Forecast title
         const Text(
           '5‑Day Forecast',
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 10),
         SizedBox(
-          height: 200,
+          height: 250,
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
             physics: BouncingScrollPhysics(),
@@ -36,43 +37,56 @@ class ForecastDisplay extends StatelessWidget {
               return AnimatedContainer(
                 duration: Duration(milliseconds: 400),
                 curve: Curves.easeOut,
-                width: 100,
+                width: 120,
                 margin: const EdgeInsets.symmetric(horizontal: 2),  
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    // Day
                     Text(
                       dayFormat.format(item.dateTime),
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 3),
+                    // Time
                     Text(
                       timeFormat.format(item.dateTime),
-                      style: TextStyle(fontSize: 14),
+                      style: TextStyle(fontSize: 18),
                     ),
                     const SizedBox(height: 8),
+                    // Weather icon
                     Image.asset(
                       getWeatherIconByCode(item.iconCode),
                       width: 50,
                       height: 50,
                     ),
                     const SizedBox(height: 5),
+                    // Description
                     Text(
                       item.description,
                       textAlign: TextAlign.center,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(fontSize: 12),
+                      style: TextStyle(fontSize: 14),
                     ),
                     SizedBox(height: 4),
+                    // Temperature
                     Text(
                       '${item.temperature.toStringAsFixed(0)}°C',
                       style: TextStyle(
-                        fontSize: 15,
+                        fontSize: 20,
                         fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    // Feels like temperature
+                    Text(
+                      'Feels ${item.feelsLike.toStringAsFixed(0)}°C',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey.shade800,
                       ),
                     ),
                   ],
