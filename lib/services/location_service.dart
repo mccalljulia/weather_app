@@ -19,9 +19,6 @@ class LocationService {
     }
 
     Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-    double lat = position.latitude;
-    double lon = position.longitude;
-    print("Latitude = $lat\n Longitude = $lon"); // debug
 
     return position;
 

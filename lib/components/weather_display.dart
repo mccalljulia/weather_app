@@ -19,24 +19,38 @@ class WeatherDisplay extends StatelessWidget {
           // City
           Text(
             weather.city,
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
           ),
           // Time
-          Text(dateFormat.format(weather.today)),
+          Text(
+            dateFormat.format(weather.today),
+            style: TextStyle(fontSize: 20),
+          ),
           const SizedBox(height: 10),
           // Weather icon
           Image.asset(
-            getWeatherIcon(weather.id),
+            getWeatherIconByCode(weather.iconCode),
             width: 150,
             height: 150,
           ),
           SizedBox(height: 10),
           // Description
-          Text(weather.description, style: TextStyle(fontSize: 18)),
+          Text(
+            weather.description,
+            style: TextStyle(fontSize: 20)
+          ),
           // Temperature
           Text(
             '${weather.temperature.toStringAsFixed(0)} °C',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: 30,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          // Feels like temperature
+          Text(
+            'Feels ${weather.feelsLike.toStringAsFixed(0)} °C',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.grey.shade800),
           ),
           SizedBox(height: 20),
           // Sunrise and sunset times
