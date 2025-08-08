@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../providers/weather_provider.dart';
 import '../components/weather_display.dart';
 import '../utils/background_mapper.dart';
+import '../components/forecast_display.dart';
 
 class CurrentWeatherPage extends StatefulWidget {
   const CurrentWeatherPage({super.key});
@@ -139,9 +140,11 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage> {
                   vertical: 10,
                 ),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     if (weatherProvider.isLoading)
                       const CircularProgressIndicator()
+                    // Current weather display
                     else if (weather != null)
                       Container(
                         padding: const EdgeInsets.all(16),
@@ -165,6 +168,23 @@ class _CurrentWeatherPageState extends State<CurrentWeatherPage> {
                         style: TextStyle(fontSize: 18),
                         textAlign: TextAlign.center,
                       ),
+                      SizedBox(height: 20),
+                    // Forecast information
+                    Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Colors.blue.shade100.withValues(alpha: 0.3),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.white54.withValues(alpha: 0.3),
+                              blurRadius: 10,
+                              offset: Offset(0, 0),
+                            ),
+                          ],
+                        ),
+                        child: ForecastDisplay(),
+                      )
                   ],
                 ),
               ),
