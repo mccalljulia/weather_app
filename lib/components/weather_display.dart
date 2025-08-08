@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/weather.dart';
 import 'package:intl/intl.dart';
-import '../utils/icon_mapper.dart';
 
 class WeatherDisplay extends StatelessWidget {
   final Weather weather;
@@ -26,31 +25,27 @@ class WeatherDisplay extends StatelessWidget {
             dateFormat.format(weather.today),
             style: TextStyle(fontSize: 20),
           ),
-          const SizedBox(height: 10),
-          // Weather icon
-          Image.asset(
-            getWeatherIconByCode(weather.iconCode),
+          Image.network(
+            'https://openweathermap.org/img/wn/${weather.iconCode}@2x.png',
             width: 150,
             height: 150,
+            fit: BoxFit.contain,
           ),
-          SizedBox(height: 10),
           // Description
-          Text(
-            weather.description,
-            style: TextStyle(fontSize: 20)
-          ),
+          Text(weather.description, style: TextStyle(fontSize: 20)),
           // Temperature
           Text(
             '${weather.temperature.toStringAsFixed(0)} °C',
-            style: TextStyle(
-              fontSize: 30,
-              fontWeight: FontWeight.bold,
-            ),
+            style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
           ),
           // Feels like temperature
           Text(
             'Feels ${weather.feelsLike.toStringAsFixed(0)} °C',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.grey.shade800),
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.grey.shade800,
+            ),
           ),
           SizedBox(height: 20),
           // Sunrise and sunset times
@@ -61,11 +56,18 @@ class WeatherDisplay extends StatelessWidget {
                 children: [
                   Image.asset(
                     'assets/images/icons/sunrise_icon.png',
-                    width: 50,
-                    height: 50,
+                    width: 60,
+                    height: 60,
+                    fit: BoxFit.contain,
                   ),
-                  Text('Sunrise'),
-                  Text(timeFormat.format(weather.sunrise)),
+                  Text(
+                    'Sunrise',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  Text(
+                    timeFormat.format(weather.sunrise),
+                    style: TextStyle(fontSize: 16),
+                  ),
                 ],
               ),
               SizedBox(width: 50),
@@ -73,11 +75,18 @@ class WeatherDisplay extends StatelessWidget {
                 children: [
                   Image.asset(
                     'assets/images/icons/sunset_icon.png',
-                    width: 50,
-                    height: 50,
+                    width: 60,
+                    height: 60,
+                    fit: BoxFit.contain,
                   ),
-                  Text('Sunset'),
-                  Text(timeFormat.format(weather.sunset)),
+                  Text(
+                    'Sunset',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  Text(
+                    timeFormat.format(weather.sunset),
+                    style: TextStyle(fontSize: 16),
+                  ),
                 ],
               ),
             ],

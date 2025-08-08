@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../providers/weather_provider.dart';
-import '../utils/icon_mapper.dart';
 
 class ForecastDisplay extends StatelessWidget {
   ForecastDisplay({super.key});
@@ -38,7 +37,7 @@ class ForecastDisplay extends StatelessWidget {
                 duration: Duration(milliseconds: 400),
                 curve: Curves.easeOut,
                 width: 120,
-                margin: const EdgeInsets.symmetric(horizontal: 2),  
+                margin: const EdgeInsets.symmetric(horizontal: 2),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -55,14 +54,11 @@ class ForecastDisplay extends StatelessWidget {
                       timeFormat.format(item.dateTime),
                       style: TextStyle(fontSize: 18),
                     ),
-                    const SizedBox(height: 8),
                     // Weather icon
-                    Image.asset(
-                      getWeatherIconByCode(item.iconCode),
-                      width: 50,
-                      height: 50,
+                    Image.network(
+                      'https://openweathermap.org/img/wn/${item.iconCode}@2x.png',
+                      height: 80,
                     ),
-                    const SizedBox(height: 5),
                     // Description
                     Text(
                       item.description,

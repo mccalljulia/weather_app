@@ -24,7 +24,9 @@ class WeatherProvider with ChangeNotifier {
       _weather = Weather.fromJson(data);
 
       final forecastData = await _weatherService.fetchForecastByCity(city);
-      _forecast = ForecastItem.fromJsonList(forecastData['list']);
+      final timezoneOffset = forecastData['city']['timezone'];
+
+      _forecast = ForecastItem.fromJsonList(forecastData['list'], timezoneOffset);
     } catch (e) {
       _weather = null;
       _forecast = [];
@@ -46,7 +48,8 @@ class WeatherProvider with ChangeNotifier {
       _weather = Weather.fromJson(data);
 
       final forecastData = await _weatherService.fetchForecastByLatLong(lat, lon);
-      _forecast = ForecastItem.fromJsonList(forecastData['list']);
+      final timezoneOffset = forecastData['city']['timezone'];
+      _forecast = ForecastItem.fromJsonList(forecastData['list'], timezoneOffset);
     } catch (e) {
       _weather = null;
       _forecast = [];

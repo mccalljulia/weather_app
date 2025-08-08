@@ -13,18 +13,22 @@ class ForecastItem {
     required this.iconCode,
   });
 
-  static List<ForecastItem> fromJsonList(List<dynamic> list) {
-    final forecastList = list
-        .map(
-          (item) => ForecastItem(
-            dateTime: DateTime.fromMillisecondsSinceEpoch(item['dt'] * 1000),
-            temperature: (item['main']['temp'] as num).toDouble(),
-            feelsLike: (item['main']['feels_like'] as num).toDouble(),
-            description: item['weather'][0]['description'],
-            iconCode: item['weather'][0]['icon'],
-          ),
-        )
-        .toList();
+  static List<ForecastItem> fromJsonList(
+    List<dynamic> list,
+    int timezoneOffset,
+  ) {
+    final forecastList = list.map((item) {
+      return ForecastItem(
+        dateTime: DateTime.fromMillisecondsSinceEpoch(
+          item['dt'] * 1000,
+          isUtc: true,
+        ).add(Duration(seconds: timezoneOffset)),
+        temperature: (item['main']['temp'] as num).toDouble(),
+        feelsLike: (item['main']['feels_like'] as num).toDouble(),
+        description: item['weather'][0]['description'],
+        iconCode: item['weather'][0]['icon'],
+      );
+    }).toList();
     return forecastList;
   }
 }
