@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/weather.dart';
+import '../models/forecast_item.dart';
 import '../services/weather_service.dart';
 import '../services/location_service.dart';
 
@@ -8,9 +9,11 @@ class WeatherProvider with ChangeNotifier {
   bool _isLoading = false;
   final WeatherService _weatherService = WeatherService();
   final LocationService _locationService = LocationService();
+  List<ForecastItem> _forecast = [];
 
   Weather? get weather => _weather;
   bool get isLoading => _isLoading;
+  List<ForecastItem> get forecast => _forecast;
 
   Future<void> fetchWeather(String city) async {
     _isLoading = true;
@@ -19,8 +22,12 @@ class WeatherProvider with ChangeNotifier {
     try {
       final data = await _weatherService.fetchWeather(city);
       _weather = Weather.fromJson(data);
+
+      final forecastData = await _weatherService.fetchForecastByCity(city);
+      _forecast = ForecastItem.fromJsonList(forecastData['list']);
     } catch (e) {
       _weather = null;
+      _forecast = [];
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -37,8 +44,12 @@ class WeatherProvider with ChangeNotifier {
       final lon = position.longitude;
       final data = await _weatherService.fetchWeatherByLatLong(lat, lon);
       _weather = Weather.fromJson(data);
+
+      final forecastData = await _weatherService.fetchForecastByLatLong(lat, lon);
+      _forecast = ForecastItem.fromJsonList(forecastData['list']);
     } catch (e) {
       _weather = null;
+      _forecast = [];
     } finally {
       _isLoading = false;
       notifyListeners();
