@@ -19,18 +19,30 @@ class Weather {
     required this.sunrise,
     required this.sunset,
     required this.iconCode,
-    });
+  });
 
   factory Weather.fromJson(Map<String, dynamic> json) {
+    final int timezoneOffset = json['timezone'];
+
+    DateTime applyOffset(int utcSeconds) {
+      return DateTime.fromMillisecondsSinceEpoch(
+        utcSeconds * 1000,
+        isUtc: true,
+      ).add(Duration(seconds: timezoneOffset));
+    }
+
     return Weather(
       id: json['weather'][0]['id'],
       city: json['name'],
       description: json['weather'][0]['description'],
       temperature: json['main']['temp'],
       feelsLike: json['main']['feels_like'],
-      today: DateTime.fromMillisecondsSinceEpoch(json['dt'] * 1000, isUtc: true),
-      sunrise: DateTime.fromMillisecondsSinceEpoch(json['sys']['sunrise'] * 1000, isUtc: true),
-      sunset: DateTime.fromMillisecondsSinceEpoch(json['sys']['sunset'] * 1000, isUtc: true),
+      today: DateTime.fromMillisecondsSinceEpoch(
+        json['dt'] * 1000,
+        isUtc: true,
+      ),
+      sunrise: applyOffset(json['sys']['sunrise']),
+      sunset: applyOffset(json['sys']['sunset']),
       iconCode: json['weather'][0]['icon'],
     );
   }
